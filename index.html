@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ashwin K J - Game Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600&family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="works-gallery.css">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      width: 100%;
+      background-color: #efefef;
+      scroll-behavior: auto;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: #efefef;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #111111;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Section 1 Hero Pinned Wrapper */
+    .hero-section-pin {
+      position: relative;
+      width: 100%;
+      height: 500vh;
+      background-color: #efefef;
+    }
+
+    .hero-sticky-frame {
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #efefef;
+      z-index: 5;
+    }
+
+    /* Giant Edge-to-Edge PORTFOLIO Title in Background Layer (z-index: 1) */
+    .huge-bg-title-wrap {
+      position: absolute;
+      top: 6vh;
+      left: 0;
+      width: 100vw;
+      height: 68vh;
+      pointer-events: none;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .huge-bg-title-svg {
+      width: 100vw;
+      height: 100%;
+      display: block;
+      overflow: visible;
+    }
+
+    /* Fullscreen 3D Character Canvas (z-index: 2, in front of PORTFOLIO) */
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Foreground Content Overlay Layer (z-index: 10) */
+    .overlay-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 36px 54px;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Top Navigation / Header Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+    }
+
+    .top-left {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .top-role {
+      font-size: 11.5px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #d31a28;
+    }
+
+    /* Main Bottom Hero Content */
+    .hero-content {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+      width: 100%;
+      margin-top: auto;
+    }
+
+    /* Left Column Details */
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      max-width: 440px;
+      pointer-events: auto;
+    }
+
+    /* Progressive Reveal Elements (initially hidden, fade in on scroll) */
+    .reveal-item {
+      opacity: 0;
+      will-change: opacity, transform;
+    }
+
+    .greeting {
+      font-family: 'Caveat', cursive, serif;
+      font-size: 34px;
+      color: #111111;
+      margin-bottom: -6px;
+      opacity: 0.95;
+      transform: rotate(-2deg);
+      display: inline-block;
+    }
+
+    .main-name {
+      font-family: 'Bebas Neue', 'Oswald', 'Impact', sans-serif;
+      font-size: clamp(56px, 6vw, 92px);
+      line-height: 0.9;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: #111111;
+      margin-bottom: 12px;
+    }
+
+    .main-name span {
+      display: block;
+    }
+
+    .tagline-red {
+      font-size: 13.5px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #d31a28;
+      line-height: 1.35;
+      margin-bottom: 12px;
+    }
+
+    .bio-text {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: #555555;
+      font-weight: 400;
+      max-width: 320px;
+    }
+
+    /* Scroll Indicator Pill at Bottom Center */
+    .scroll-hint {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #777777;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      pointer-events: auto;
+      z-index: 10;
+    }
+
+    .scroll-hint-bar {
+      width: 40px;
+      height: 2px;
+      background: rgba(0, 0, 0, 0.12);
+      border-radius: 1px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .scroll-hint-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: #d31a28;
+      transition: width 0.1s linear;
+    }
+
+    /* Hero Scroll Height Track */
+    #scroll-track {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #efefef;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(211, 26, 40, 0.35);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #d31a28;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 1100px) {
+      .overlay-container {
+        padding: 24px 32px;
+      }
+
+      .main-name {
+        font-size: 56px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .overlay-container {
+        padding: 20px;
+      }
+
+      .huge-bg-title-wrap {
+        height: 50vh;
+        top: 10vh;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ============================================================== -->
+  <!-- SECTION 1: HERO PORTFOLIO (100% PRESERVED & UNCHANGED)        -->
+  <!-- ============================================================== -->
+  <section id="hero-section" class="hero-section-pin">
+    <div class="hero-sticky-frame">
+      <!-- Giant Edge-to-Edge PORTFOLIO Title in Background (z-index: 1) -->
+      <div class="huge-bg-title-wrap">
+        <svg class="huge-bg-title-svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="portfolio-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#cc1624" stop-opacity="1" />
+              <stop offset="35%" stop-color="#ba121f" stop-opacity="0.95" />
+              <stop offset="62%" stop-color="#ba121f" stop-opacity="0.48" />
+              <stop offset="85%" stop-color="#ba121f" stop-opacity="0.10" />
+              <stop offset="100%" stop-color="#ba121f" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <text x="500" y="262" text-anchor="middle" font-family="'Bebas Neue', 'Impact', sans-serif" font-weight="900"
+            font-size="310" textLength="992" lengthAdjust="spacingAndGlyphs"
+            fill="url(#portfolio-gradient)">PORTFOLIO</text>
+        </svg>
+      </div>
+
+      <!-- Fullscreen 3D Character Canvas (z-index: 2, in front of PORTFOLIO) -->
+      <canvas id="canvas"></canvas>
+
+      <!-- Foreground Content Overlay Layer (z-index: 10) -->
+      <div class="overlay-container">
+        <!-- Top Header Bar: Game Developer (Always Visible) -->
+        <header class="top-bar">
+          <div class="top-left">
+            <span class="top-role">GAME DEVELOPER</span>
+          </div>
+        </header>
+
+        <!-- Main Bottom Foreground Content (Progressive Reveals on Scroll) -->
+        <div class="hero-content">
+          <div class="left-col">
+            <!-- 1. Hello, I'm -->
+            <div class="reveal-item" id="reveal-greeting">
+              <div class="greeting">Hello, I'm</div>
+            </div>
+
+            <!-- 2. Ashwin K J -->
+            <div class="reveal-item" id="reveal-name">
+              <h1 class="main-name">
+                <span>ASHWIN</span>
+                <span>K J</span>
+              </h1>
+            </div>
+
+            <!-- 3. Game Developer Tagline -->
+            <div class="reveal-item" id="reveal-tagline">
+              <div class="tagline-red">GAME DEVELOPER</div>
+            </div>
+
+            <!-- 4. Bio Paragraph -->
+            <div class="reveal-item" id="reveal-bio">
+              <p class="bio-text">
+                Game Developer passionate about gameplay programming, level design, and creating immersive experiences
+                using
+                Unity and Unreal Engine.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Center Scroll Progress -->
+        <div class="scroll-hint">
+          <span>SCROLL</span>
+          <div class="scroll-hint-bar">
+            <div class="scroll-hint-progress" id="scroll-progress"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll Track for 500vh Animation Travel -->
+    <div id="scroll-track"></div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- SECTION 2: MY WORKS (Circular Orbital Interactive Gallery)    -->
+  <!-- ============================================================== -->
+  <section id="works-section" class="works-section-pin">
+    <div class="works-sticky-frame">
+      <!-- Interactive Black Bubble Particles Canvas -->
+      <canvas id="particles-canvas" class="particles-canvas"></canvas>
+
+      <!-- Editorial Left Column -->
+      <div class="works-editorial-left">
+        <div class="editorial-top-tag">
+          <span class="tag-num">02 / WORKS</span>
+          <span class="tag-line"></span>
+        </div>
+        <div class="editorial-titles">
+          <span class="sub-label">GAME DEVELOPMENT</span>
+          <h2 class="main-works-title">MY<br>WORKS</h2>
+        </div>
+        <p class="editorial-desc">
+          A COLLECTION OF MY GAME DEVELOPMENT PROJECTS.
+        </p>
+        <div class="editorial-accent-bar"></div>
+        <div class="editorial-scroll-prompt">
+          <span>SCROLL</span>
+          <svg class="arrow-down-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 5v14M5 12l7 7 7-7" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Circular Orbital Project Gallery Stage -->
+      <div class="circular-gallery-stage" id="circular-gallery-stage">
+        <!-- SVG Orbit Guide Path -->
+        <svg class="orbit-arc-svg" id="orbit-arc-svg">
+          <circle class="orbit-arc-circle" id="orbit-circle-guide" cx="300" cy="600" r="580" />
+        </svg>
+
+        <!-- Ambient orbit trailing numbers -->
+        <div class="orbit-faded-number orbit-num-top" id="orbit-num-top">06</div>
+        <div class="orbit-faded-number orbit-num-bottom" id="orbit-num-bottom">02</div>
+
+        <!-- Cards Container -->
+        <div class="cards-orbit-container" id="cards-orbit-container">
+          <!-- 6 project cards generated by works-gallery.js -->
+        </div>
+
+        <!-- Return to gallery tooltip -->
+        <div class="gallery-return-hint" id="gallery-return-hint">
+          <span>← CLICK TO RETURN TO GALLERY</span>
+        </div>
+      </div>
+
+      <!-- Project Details Slide-in Panel (Split-Screen Mode) -->
+      <div class="project-details-panel" id="project-details-panel" role="region" aria-label="Project Details">
+        <button class="details-close-btn" id="details-close-btn" aria-label="Close Project Details">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div class="details-inner-content" id="details-inner-content">
+          <!-- Rendered dynamically by works-gallery.js -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="lenis.min.js"></script>
+  <script>
+    (function () {
+      const FRAME_COUNT = 238;
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d', { alpha: false });
+      const progressBar = document.getElementById('scroll-progress');
+
+      // Progressive reveal elements
+      const elGreeting = document.getElementById('reveal-greeting');
+      const elName = document.getElementById('reveal-name');
+      const elTagline = document.getElementById('reveal-tagline');
+      const elBio = document.getElementById('reveal-bio');
+
+      const images = new Array(FRAME_COUNT);
+      let targetFrame = 0;
+      let currentFrame = 0;
+      let lastDrawnFrame = -1;
+      let hasDrawnAny = false;
+
+      // Clean history scroll restoration
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual';
+      }
+
+      // Construct frame filename: exact sequence ezgif-frame-001.png to ezgif-frame-238.png
+      function getFrameSrc(index) {
+        const num = String(index + 1).padStart(3, '0');
+        return `frames/ezgif-frame-${num}.png`;
+      }
+
+      function resizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+
+        if (hasDrawnAny) {
+          const currentInt = Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(currentFrame)));
+          drawFrame(currentInt, true);
+        }
+      }
+
+      function getActiveImage(index) {
+        if (images[index] && images[index].complete && images[index].naturalWidth > 0) {
+          return images[index];
+        }
+        for (let offset = 1; offset < FRAME_COUNT; offset++) {
+          const prev = index - offset;
+          if (prev >= 0 && images[prev] && images[prev].complete && images[prev].naturalWidth > 0) {
+            return images[prev];
+          }
+          const next = index + offset;
+          if (next < FRAME_COUNT && images[next] && images[next].complete && images[next].naturalWidth > 0) {
+            return images[next];
+          }
+        }
+        return null;
+      }
+
+      function drawFrame(index, force = false) {
+        const img = getActiveImage(index);
+        if (!img || !img.naturalWidth || !img.naturalHeight) return false;
+
+        if (!force && lastDrawnFrame === index && hasDrawnAny) return true;
+
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const iw = img.naturalWidth;
+        const ih = img.naturalHeight;
+
+        // Contain calculation: 100% of frame is visible, exact 16:9 aspect ratio preserved
+        const scale = Math.min(cw / iw, ch / ih);
+        const dw = Math.round(iw * scale);
+        const dh = Math.round(ih * scale);
+        const dx = Math.round((cw - dw) * 0.5);
+        const dy = Math.round((ch - dh) * 0.5);
+
+        // Fill background with exact matching #efefef tone
+        ctx.fillStyle = '#efefef';
+        ctx.fillRect(0, 0, cw, ch);
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, dx, dy, dw, dh);
+
+        lastDrawnFrame = index;
+        hasDrawnAny = true;
+        return true;
+      }
+
+      // Progressive content reveals based on scroll progress (0.0 to 1.0)
+      function updateProgressiveReveals(progress) {
+        function getReveal(p, start, end) {
+          if (p <= start) return 0;
+          if (p >= end) return 1;
+          const t = (p - start) / (end - start);
+          return t * t * (3 - 2 * t); // smooth cubic ease
+        }
+
+        // 1. Hello, I'm: reveals from 0.05 to 0.28
+        const rGreeting = getReveal(progress, 0.05, 0.28);
+        if (elGreeting) {
+          elGreeting.style.opacity = rGreeting;
+          elGreeting.style.transform = `translateY(${(1 - rGreeting) * 20}px)`;
+        }
+
+        // 2. Ashwin K J: reveals from 0.25 to 0.52
+        const rName = getReveal(progress, 0.25, 0.52);
+        if (elName) {
+          elName.style.opacity = rName;
+          elName.style.transform = `translateY(${(1 - rName) * 26}px)`;
+        }
+
+        // 3. Game Developer: reveals from 0.50 to 0.74
+        const rTagline = getReveal(progress, 0.50, 0.74);
+        if (elTagline) {
+          elTagline.style.opacity = rTagline;
+          elTagline.style.transform = `translateY(${(1 - rTagline) * 20}px)`;
+        }
+
+        // 4. Bio Paragraph: reveals from 0.70 to 0.98 (fully visible by end of scroll)
+        const rBio = getReveal(progress, 0.70, 0.98);
+        if (elBio) {
+          elBio.style.opacity = rBio;
+          elBio.style.transform = `translateY(${(1 - rBio) * 22}px)`;
+        }
+      }
+
+      function getHeroProgress() {
+        const heroSection = document.getElementById('hero-section');
+        const heroMaxScroll = Math.max(1, (heroSection ? heroSection.offsetHeight : window.innerHeight * 5) - window.innerHeight);
+        const currentY = window.pageYOffset || document.documentElement.scrollTop || window.scrollY || 0;
+        return Math.max(0, Math.min(1, currentY / heroMaxScroll));
+      }
+
+      function updateTargetFromScroll() {
+        const progress = getHeroProgress();
+        targetFrame = progress * (FRAME_COUNT - 1);
+      }
+
+      function preloadImages() {
+        function loadFrame(i) {
+          if (images[i]) return images[i];
+          const img = new Image();
+          img.decoding = 'async';
+          images[i] = img;
+
+          img.onload = () => {
+            const currentInt = Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(currentFrame)));
+            if (!hasDrawnAny || currentInt === i) {
+              drawFrame(currentInt, true);
+            } else if (lastDrawnFrame >= 0) {
+              const currentDist = Math.abs(lastDrawnFrame - currentInt);
+              const newDist = Math.abs(i - currentInt);
+              if (newDist < currentDist) {
+                drawFrame(currentInt, true);
+              }
+            }
+          };
+
+          img.src = getFrameSrc(i);
+          return img;
+        }
+
+        // 1. Initial frame rendered immediately
+        loadFrame(0);
+
+        // 2. Preload keyframes across sequence for instant responsive scrubbing
+        const KEYFRAME_STEP = 6;
+        for (let i = KEYFRAME_STEP; i < FRAME_COUNT; i += KEYFRAME_STEP) {
+          loadFrame(i);
+        }
+        loadFrame(FRAME_COUNT - 1);
+
+        // 3. Preload all remaining intermediate frames progressively
+        for (let i = 1; i < FRAME_COUNT; i++) {
+          if (!images[i]) {
+            loadFrame(i);
+          }
+        }
+      }
+
+      // Initialize Lenis smooth scroller
+      let lenis = null;
+      if (typeof Lenis !== 'undefined') {
+        lenis = new Lenis({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+          touchMultiplier: 1.5,
+          infinite: false
+        });
+
+        window.__portfolioLenis = lenis;
+
+        lenis.on('scroll', ({ scroll }) => {
+          const heroSection = document.getElementById('hero-section');
+          const heroMaxScroll = Math.max(1, (heroSection ? heroSection.offsetHeight : window.innerHeight * 5) - window.innerHeight);
+          const p = Math.max(0, Math.min(1, scroll / heroMaxScroll));
+          targetFrame = p * (FRAME_COUNT - 1);
+        });
+      }
+
+      window.addEventListener('scroll', updateTargetFromScroll, { passive: true });
+
+      function animate(time) {
+        if (lenis) {
+          lenis.raf(time);
+        }
+
+        const diff = targetFrame - currentFrame;
+        if (Math.abs(diff) > 0.001) {
+          currentFrame += diff * 0.18;
+        } else {
+          currentFrame = targetFrame;
+        }
+
+        const frameIndex = Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(currentFrame)));
+        if (frameIndex !== lastDrawnFrame || !hasDrawnAny) {
+          drawFrame(frameIndex);
+        }
+
+        const progress = currentFrame / (FRAME_COUNT - 1);
+        if (progressBar) {
+          progressBar.style.width = (progress * 100).toFixed(1) + '%';
+        }
+        updateProgressiveReveals(progress);
+
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener('resize', resizeCanvas, { passive: true });
+      resizeCanvas();
+      preloadImages();
+      updateTargetFromScroll();
+      currentFrame = targetFrame;
+      updateProgressiveReveals(currentFrame / (FRAME_COUNT - 1));
+      requestAnimationFrame(animate);
+    })();
+  </script>
+  <script src="works-gallery.js"></script>
+</body>
+
+</html>

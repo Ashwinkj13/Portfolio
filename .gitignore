@@ -1,0 +1,29 @@
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Temporary reference images
+scratch_reference_frames/
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
