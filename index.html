@@ -11,6 +11,7 @@
     href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@600&family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="works-gallery.css">
+  <link rel="stylesheet" href="smoke-transition.css">
   <style>
     *,
     *::before,
@@ -364,6 +365,13 @@
   </section>
 
   <!-- ============================================================== -->
+  <!-- CINEMATIC SMOKE TRANSITION (Isolated Bridge Component)          -->
+  <!-- ============================================================== -->
+  <div id="smoke-transition-layer" class="smoke-transition-layer" aria-hidden="true">
+    <canvas id="smoke-canvas" class="smoke-canvas"></canvas>
+  </div>
+
+  <!-- ============================================================== -->
   <!-- SECTION 2: MY WORKS (Circular Orbital Interactive Gallery)    -->
   <!-- ============================================================== -->
   <section id="works-section" class="works-section-pin">
@@ -679,6 +687,7 @@
     })();
   </script>
   <script src="works-gallery.js"></script>
+  <script src="smoke-transition.js"></script>
 </body>
 
 </html>

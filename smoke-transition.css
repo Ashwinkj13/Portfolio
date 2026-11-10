@@ -1,0 +1,32 @@
+/* ============================================================== */
+/* CINEMATIC VOLUMETRIC SMOKE TRANSITION — DARK ASH / CHARCOAL     */
+/* Isolated, full-screen hardware-accelerated volumetric canvas   */
+/* ============================================================== */
+
+#smoke-transition-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 25; /* Above Hero and Works content, below Project Details modal (z-index: 35) */
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  will-change: opacity;
+}
+
+#smoke-transition-layer.is-active {
+  visibility: visible;
+}
+
+#smoke-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
