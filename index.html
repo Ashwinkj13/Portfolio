@@ -424,7 +424,9 @@
       </div>
 
       <!-- Project Details Slide-in Panel (Split-Screen Mode) -->
-      <div class="project-details-panel" id="project-details-panel" role="region" aria-label="Project Details">
+      <div class="project-details-panel" id="project-details-panel" data-lenis-prevent="true"
+        data-lenis-prevent-wheel="true" data-lenis-prevent-touch="true" role="region" aria-label="Project Details"
+        tabindex="-1">
         <button class="details-close-btn" id="details-close-btn" aria-label="Close Project Details">
           <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none">
             <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -636,7 +638,18 @@
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
           smoothWheel: true,
           touchMultiplier: 1.5,
-          infinite: false
+          infinite: false,
+          prevent: (node) => {
+            return node && (
+              node.id === 'project-details-panel' ||
+              (node.closest && !!node.closest('#project-details-panel')) ||
+              (node.hasAttribute && (
+                node.hasAttribute('data-lenis-prevent') ||
+                node.hasAttribute('data-lenis-prevent-wheel') ||
+                node.hasAttribute('data-lenis-prevent-touch')
+              ))
+            );
+          }
         });
 
         window.__portfolioLenis = lenis;

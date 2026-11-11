@@ -522,6 +522,11 @@
       this.worksSection.classList.add('is-split-mode');
       this.detailsPanel.classList.add('is-active');
 
+      // Ensure Lenis recognises this nested scroll container
+      this.detailsPanel.setAttribute('data-lenis-prevent', 'true');
+      this.detailsPanel.setAttribute('data-lenis-prevent-wheel', 'true');
+      this.detailsPanel.setAttribute('data-lenis-prevent-touch', 'true');
+
       // Scroll details panel to top
       this.detailsPanel.scrollTop = 0;
 
@@ -529,6 +534,11 @@
       if (window.__portfolioLenis) {
         window.__portfolioLenis.stop();
       }
+
+      // Focus panel for immediate keyboard scroll accessibility without shifting scroll
+      try {
+        this.detailsPanel.focus({ preventScroll: true });
+      } catch (err) {}
     }
 
     closeProjectDetails() {

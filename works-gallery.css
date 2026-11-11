@@ -380,6 +380,7 @@
   right: 0;
   width: 58vw;
   height: 100vh;
+  max-height: 100vh;
   background: #ffffff;
   z-index: 35;
   transform: translateX(100%);
@@ -390,6 +391,28 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   box-shadow: -20px 0 50px rgba(0, 0, 0, 0.08);
+  outline: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+
+/* Custom Visible Scrollbar for Details Panel */
+.project-details-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.project-details-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.project-details-panel::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.22);
+  border-radius: 4px;
+  border: 2px solid #ffffff;
+}
+
+.project-details-panel::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(211, 26, 40, 0.85);
 }
 
 .project-details-panel.is-active {
@@ -434,6 +457,7 @@
   flex-direction: column;
   gap: 28px;
   clear: both;
+  min-height: min-content;
 }
 
 .details-header-tag {
@@ -727,6 +751,8 @@
 
   .project-details-panel {
     width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
   }
 
   .details-inner-content {
